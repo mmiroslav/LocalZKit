@@ -12,16 +12,42 @@ public class LocalZManager {
     init() {}
     
     public var translates = [String: String]()
-}
+    public var currentLocale: Locale = .en {
+        didSet {
+            updateCurrentTranslates(with: currentLocale)
+        }
+    }
+    public var version: String = "0.0.0"
+    
+    // MARK: Private
 
+    private let userDefaultsBaseKey = "translatesDict.locale."
+    
+    // MARK: - Version
 
-public extension String {
-    public func localized() -> String {
-        LocalZManager.shared.translates[self] ?? self
+    public func isLatestVersion(_ latest: String) -> Bool {
+        self.version.compare(latest, options: .numeric) != .orderedAscending
     }
     
-//    var localized: String {
-//        self.localized()
-//    }
+    // MARK: - Translates
+    
+    public func setTranslates(translates: Dictionary<String, String>, locale: Locale) {
+        UserDefaults.standard.setValue(translates, forKey: userDefaultsBaseKey + locale.rawValue)
+    }
 }
+
+private extension LocalZManager {
+    
+    func updateCurrentTranslates(with locale: Locale) {
+        self.translates = self.fetchTranslates(for: locale)
+    }
+    
+    func fetchTranslates(for locale: Locale) -> Dictionary<String, String> {
+        if let translates = UserDefaults.standard.value(forKey: userDefaultsBaseKey + locale.rawValue) as? Dictionary<String, String> {
+            return translates
+        }
+        return [:]
+    }
+}
+
 
