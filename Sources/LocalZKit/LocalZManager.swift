@@ -7,16 +7,16 @@
 
 import Foundation
 
-class LocalZManager {
-    static let shared: LocalZManager = LocalZManager()
+public class LocalZManager {
+    public static let shared: LocalZManager = LocalZManager()
     init() {}
     
-    var translates = [String: String]()
+    public var translates = [String: String]()
 }
 
 
-extension String {
-    func localized() -> String {
+public extension String {
+    public func localized() -> String {
         LocalZManager.shared.translates[self] ?? self
     }
     
