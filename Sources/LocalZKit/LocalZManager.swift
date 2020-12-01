@@ -20,8 +20,8 @@ extension String {
         LocalZManager.shared.translates[self] ?? self
     }
     
-    var localized: String {
-        self.localized()
-    }
+//    var localized: String {
+//        self.localized()
+//    }
 }
 
