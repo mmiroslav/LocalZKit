@@ -11,4 +11,8 @@ public extension String {
     func localized() -> String {
         LocalZManager.shared.translates[self] ?? self
     }
+    
+    var localz: String {
+        self.localized()
+    }
 }
