@@ -17,16 +17,25 @@ public class LocalZManager {
             updateCurrentTranslates(with: currentLocale)
         }
     }
-    public var version: String = "0.0.0"
+    public var version: String {
+        get {
+            getCurrentVersion()
+        }
+        set {
+            setCurrentVersion(newValue)
+        }
+    }
     
     // MARK: Private
 
     private let userDefaultsBaseKey = "translatesDict.locale."
+    private let userDefaultsKeyForVersion = "translatesDict.version"
+    private let defaultVersion = "0.0.0"
     
     // MARK: - Version
 
     public func isLatestVersion(_ latest: String) -> Bool {
-        self.version.compare(latest, options: .numeric) != .orderedAscending
+        version.compare(latest, options: .numeric) != .orderedAscending
     }
     
     // MARK: - Translates
@@ -39,7 +48,7 @@ public class LocalZManager {
 private extension LocalZManager {
     
     func updateCurrentTranslates(with locale: Locale) {
-        self.translates = self.fetchTranslates(for: locale)
+        translates = fetchTranslates(for: locale)
     }
     
     func fetchTranslates(for locale: Locale) -> Dictionary<String, String> {
@@ -47,6 +56,16 @@ private extension LocalZManager {
             return translates
         }
         return [:]
+    }
+    
+    func getCurrentVersion() -> String {
+        UserDefaults.standard.value(forKey: userDefaultsKeyForVersion)
+            as? String ?? defaultVersion
+        
+    }
+    
+    func setCurrentVersion(_ version: String) {
+        UserDefaults.standard.setValue(version, forKey: userDefaultsKeyForVersion)
     }
 }
 

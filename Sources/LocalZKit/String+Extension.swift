@@ -13,6 +13,6 @@ public extension String {
     }
     
     var localz: String {
-        self.localized()
+        localized()
     }
 }

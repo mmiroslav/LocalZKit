@@ -260,6 +260,6 @@ public enum Locale: String {
     case zw = "zw"
     
     var toString: String {
-        self.rawValue
+        rawValue
     }
 }
