@@ -17,8 +17,8 @@ public class LocalZManager {
             getCurrentLocale()
         }
         set {
-            setCurrentLocale(newValue)
             updateCurrentTranslates(with: newValue)
+            setCurrentLocale(newValue)
         }
     }
     public var version: String {
@@ -30,7 +30,7 @@ public class LocalZManager {
         }
     }
     
-    public static let loclaZNotificationName = Notification.Name("localz.notification.localeChanged")
+    public static let localZNotificationName = Notification.Name("localz.notification.localeChanged")
     
     // MARK: Private
 
@@ -89,10 +89,8 @@ private extension LocalZManager {
     }
     
     func setCurrentLocale(_ locale: Locale) {
-        NotificationCenter.default.post(name: Self.loclaZNotificationName, object: nil)
         UserDefaults.standard.setValue(locale.rawValue, forKey: userDefaultsKeyForCurrentLocale)
         UserDefaults.standard.synchronize()
+        NotificationCenter.default.post(name: Self.localZNotificationName, object: nil)
     }
 }
-
-
