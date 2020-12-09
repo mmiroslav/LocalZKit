@@ -30,6 +30,8 @@ public class LocalZManager {
         }
     }
     
+    public static let loclaZNotificationName = Notification.Name("localz.notification.localeChanged")
+    
     // MARK: Private
 
     private let userDefaultsBaseKey = "localz.translatesDict.locale."
@@ -83,6 +85,7 @@ private extension LocalZManager {
     }
     
     func setCurrentLocale(_ locale: Locale) {
+        NotificationCenter.default.post(name: Self.loclaZNotificationName, object: nil)
         UserDefaults.standard.setValue(locale.rawValue, forKey: userDefaultsKeyForCurrentLocale)
     }
 }
