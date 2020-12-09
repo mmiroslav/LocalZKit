@@ -12,9 +12,13 @@ public class LocalZManager {
     init() {}
     
     public var translates = [String: String]()
-    public var currentLocale: Locale = .en {
-        didSet {
-            updateCurrentTranslates(with: currentLocale)
+    public var currentLocale: Locale {
+        get {
+            getCurrentLocale()
+        }
+        set {
+            setCurrentLocale(newValue)
+            updateCurrentTranslates(with: newValue)
         }
     }
     public var version: String {
@@ -28,8 +32,9 @@ public class LocalZManager {
     
     // MARK: Private
 
-    private let userDefaultsBaseKey = "translatesDict.locale."
-    private let userDefaultsKeyForVersion = "translatesDict.version"
+    private let userDefaultsBaseKey = "localz.translatesDict.locale."
+    private let userDefaultsKeyForVersion = "localz.translatesDict.version"
+    private let userDefaultsKeyForCurrentLocale = "localz.currentLocale"
     private let defaultVersion = "0.0.0"
     
     // MARK: - Version
@@ -46,7 +51,7 @@ public class LocalZManager {
 }
 
 private extension LocalZManager {
-    
+    // Translates
     func updateCurrentTranslates(with locale: Locale) {
         translates = fetchTranslates(for: locale)
     }
@@ -58,6 +63,7 @@ private extension LocalZManager {
         return [:]
     }
     
+    // Version
     func getCurrentVersion() -> String {
         UserDefaults.standard.value(forKey: userDefaultsKeyForVersion)
             as? String ?? defaultVersion
@@ -66,6 +72,18 @@ private extension LocalZManager {
     
     func setCurrentVersion(_ version: String) {
         UserDefaults.standard.setValue(version, forKey: userDefaultsKeyForVersion)
+    }
+    
+    // Locale
+    func getCurrentLocale() -> Locale {
+        if let rawLocale = UserDefaults.standard.value(forKey: userDefaultsKeyForCurrentLocale) as? String {
+            return Locale(rawValue: rawLocale) ?? .en
+        }
+        return .en
+    }
+    
+    func setCurrentLocale(_ locale: Locale) {
+        UserDefaults.standard.setValue(locale.rawValue, forKey: userDefaultsKeyForCurrentLocale)
     }
 }
 
