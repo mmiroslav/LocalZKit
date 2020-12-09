@@ -50,6 +50,10 @@ public class LocalZManager {
     public func setTranslates(translates: Dictionary<String, String>, locale: Locale) {
         UserDefaults.standard.setValue(translates, forKey: userDefaultsBaseKey + locale.rawValue)
     }
+    
+    public func updateTranslates() {
+        self.updateCurrentTranslates(with: self.currentLocale)
+    }
 }
 
 private extension LocalZManager {
@@ -87,6 +91,7 @@ private extension LocalZManager {
     func setCurrentLocale(_ locale: Locale) {
         NotificationCenter.default.post(name: Self.loclaZNotificationName, object: nil)
         UserDefaults.standard.setValue(locale.rawValue, forKey: userDefaultsKeyForCurrentLocale)
+        UserDefaults.standard.synchronize()
     }
 }
 
